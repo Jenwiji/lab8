@@ -6,26 +6,41 @@ from PySide6.QtGui import *
 
 class Simple_drawing_window3(QWidget):
     def __init__(self):
-        self.image = QPixmap("images/tiger.png")
-        self.x = 0
-        self.y = 0
-        self.w = 100
-        self.h = 100
-        self.score = 0
-        self.miss = 0
-        self.gameover = False
-   
+        QWidget.__init__(self, None)
+        self.setWindowTitle("Simple Drawing")
+        self.rabbit = QPixmap("images/rabbit.png")
+        self.tiger = QPixmap("images/tiger.png")
+ 
+    def paintEvent(self, e):
+        p = QPainter()
+        p.begin(self)
+ 
+        p.setPen(QColor(0, 0, 0))
+        p.setBrush(QColor(0, 127, 0))
+        p.drawPolygon([
+            QPoint( 70, 100), QPoint(100, 110),
+            QPoint(130, 100), QPoint(100, 150),
+        ])
+ 
+        p.setPen(QColor(255, 127, 0))
+        p.setBrush(QColor(255, 127, 0))
+        p.drawPie(50, 150, 100, 100, 0, 180 * 16)
         
-    def draw(self, p):
-        p.drawPixmap(QRect(self.x, self.y, self.w, self.h), self.image)
+        p.drawPolygon(
+            [QPoint( 50, 200), QPoint(150, 200), QPoint(100, 400),]
+            )
+ 
+        p.drawPixmap(QRect(200, 100, 320, 320), self.rabbit)
+        p.drawPixmap(QRect(100, 50, 150, 150), self.tiger)
+        p.drawPixmap(QRect(400, 20, 150, 150), self.tiger)
 
-    def random_pos(self, arena_w, arena_h):
-        self.x = random.randint(0, arena_w - self.w)
-        self.y = random.randint(0, arena_h - self.h)
+ 
+def main():
+    app = QApplication(sys.argv)
+    w = Simple_drawing_window3()
+    w.show()
 
-    def is_hit(self, mouse_x, mouse_y):
-        if(mouse_x >= self.x and mouse_x <= self.x + self.w ):
-            self.score +=100
-            return True
-        else:
-            self.miss += 1
+    return app.exec_()
+
+if __name__ == "__main__":
+    sys.exit(main())
