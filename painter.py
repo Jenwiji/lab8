@@ -27,3 +27,17 @@ class freeHandDraw(QLabel):
         self.pbt = QPushButton("clear", self)
         self.pbt.clicked.connect(self.clear)
         self.pbt.setGeometry(QRect(100, 350, 200, 20))
+    
+    def mouseMoveEvent(self, event):
+        if self.last:
+            self.painter.drawLine(self.last, event.pos())
+
+            self.last = event.pos()
+            self.setPixmap(self.myPixmap)
+            self.update()
+
+    def mousePressEvent(self, event):
+        self.last = event.pos()
+
+    def mouseReleaseEvent(self, event):
+        self.last = None
