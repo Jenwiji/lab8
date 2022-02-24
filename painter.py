@@ -41,3 +41,26 @@ class freeHandDraw(QLabel):
 
     def mouseReleaseEvent(self, event):
         self.last = None
+
+    def updateSize(self, width, height):
+        pm = QPixmap(width, height)
+        pm.fill(Qt.white)
+        old = self.myPixmap
+        self.myPixmap = pm
+        self.pen = QPen(Qt.black)
+        self.painter = QPainter(pm)
+        self.painter.drawPixmap(0,0,old)
+        self.setPixmap(pm)
+
+    def clear(self):
+        self.updateSize(0,0)
+
+def main():
+    app = QApplication(sys.argv)
+    w = freeHandDraw()
+    w.show()
+
+    return app.exec()
+
+if __name__ == "main":
+    sys.exit(main())
